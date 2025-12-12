@@ -1,0 +1,79 @@
+@startuml
+title n-Qubit Simulator — Class Diagram
+
+package "nqubitsim.gates" <<module>> {
+class Gates {
++I, X, Y, Z, H, S, T : ndarray
++phase(theta): ndarray
++CNOT, CZ, SWAP : ndarray
++expand_single_qubit_gate(gate, target, num_qubits, use_sparse=False)
++expand_two_qubit_gate(gate, control, target, num_qubits, use_sparse=False)
++is_unitary(matrix, atol=1e-8): bool
+}
+}
+
+package "nqubitsim.state" <<module>> {
+class QuantumState {
++num_qubits: int
++sparse_threshold: int
+-_state_vector
+-_density_matrix
++dim: int
++use_sparse: bool
++post_init()
++is_density(): bool
++copy(): QuantumState
++vector(): ndarray
++density(): ndarray
++set_pure(vec)
++set_mixed(rho)
++as_density_matrix()
++promote_to_density()
++apply_unitary(operator)
++probabilities(qubits): ndarray
++_projector(qubits, bits)
++maybe_sparse(arr)
+}
+}
+
+package "nqubitsim.measurement" <<module>> {
+class Measurement {
++projective_measure(state: QuantumState, qubits, basis=None, rng=None)
++povm_measure(state: QuantumState, operators, qubits=None, rng=None)
+}
+}
+
+package "nqubitsim.noise" <<module>> {
+class Noise {
++apply_bit_flip(state: QuantumState, p, rng=None)
++apply_depolarizing(state: QuantumState, p)
+}
+}
+
+package "nqubitsim" <<module>> {
+class QuantumSimulator {
+-num_qubits: int
+-rng
+-noise_cfg: dict
+-state: QuantumState
+-classical_register: list<int>
++init(num_qubits, sparse_threshold=..., noise=None, rng=None)
++_apply_noise()
++apply_gate(gate, target)
++apply_controlled_gate(gate, control, target)
++measure(qubits, basis=None)
++povm(operators, qubits=None)
++reset()
+}
+}
+
+' Relationships
+QuantumSimulator -- QuantumState : owns
+QuantumSimulator ..> Gates : uses expand_ and gate constants
+QuantumSimulator ..> Measurement : uses projective_measure / povm_measure
+QuantumSimulator ..> Noise : uses apply_* (noise)
+
+Measurement ..> QuantumState : reads/updates, returns post_state
+Noise ..> QuantumState : mutates/promotes density
+Noise ..> Gates : uses expand_single_qubit_gate / X
+@enduml
