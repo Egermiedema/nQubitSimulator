@@ -6,7 +6,6 @@ Run with:
 
 import pathlib
 import sys
-
 import numpy as np
 
 # Ensure src/ is on path when running directly from repo
