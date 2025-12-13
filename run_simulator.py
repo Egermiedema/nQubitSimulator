@@ -1,14 +1,9 @@
-"""Quick runnable demo for the n-qubit simulator.
-
-Run with:
-    python run_simulator.py
-"""
-
 import pathlib
 import sys
 import numpy as np
 
 # Ensure src/ is on path when running directly from repo
+# Added because the import of the nqubitsim woulf fail sometimes
 ROOT = pathlib.Path(__file__).resolve().parent
 SRC = ROOT / "src"
 if str(SRC) not in sys.path:
@@ -28,8 +23,8 @@ def main():
     # Reproducible RNG for deterministic output
     rng = np.random.default_rng(42)
 
-    # Example with 2 qubits, small noise turned on
-    sim = QuantumSimulator(num_qubits=2, noise={"bit_flip": 0.02, "depolarizing": 0.05}, rng=rng)
+    #sim = QuantumSimulator(num_qubits=2, noise={"bit_flip": 0.02, "depolarizing": 0.05}, rng=rng)
+    sim = QuantumSimulator(num_qubits=2, noise= None, rng=rng)
     prepare_bell_pair(sim)
 
     # Show state probabilities before measurement
@@ -57,4 +52,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
