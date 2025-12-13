@@ -106,7 +106,10 @@ def expand_two_qubit_gate(gate: np.ndarray, control: int, target: int, num_qubit
     return op.tocsr() if use_sparse else op
 
 
+#Check if a matrix is unitary: U*U† = I.
 def is_unitary(matrix: np.ndarray, atol: float = 1e-8) -> bool:
-    """Check unitarity."""
-    return np.allclose(matrix.conj().T @ matrix, np.eye(matrix.shape[0]), atol=atol)
-
+    conjugate_transpose = matrix.conj().T   #conjugate transpose
+    product = conjugate_transpose @ matrix  #multiply U† * U
+    identity = np.eye(matrix.shape[0])      #create an identity matrix of the same size    
+    is_close = np.allclose(product, identity, atol=atol) #check if product is close to identity
+    return is_close
