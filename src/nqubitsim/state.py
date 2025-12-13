@@ -24,6 +24,7 @@ class QuantumState:
     _state_vector: Optional[np.ndarray] = None
     _density_matrix: Optional[np.ndarray] = None
 
+    #initialize state from vector V density matrix V default(|0...0>)
     def __post_init__(self):
         self.dim = 2 ** self.num_qubits
         self.use_sparse = self.dim >= self.sparse_threshold
@@ -43,7 +44,8 @@ class QuantumState:
     @property
     def is_density(self) -> bool:
         return self._density_matrix is not None
-
+    
+    #Make a copy of the "QuantumState"
     def copy(self) -> "QuantumState":
         return QuantumState(
             num_qubits=self.num_qubits,
@@ -52,19 +54,21 @@ class QuantumState:
             _density_matrix=None if self._density_matrix is None else self.density.copy(),
         )
 
-    # Accessors for dense views (helpful for downstream ops)
+    #Return the vector (only pure)
     @property
     def vector(self) -> np.ndarray:
         if self._state_vector is None:
             raise ValueError("State is not in pure form.")
         return self._state_vector
 
+    #return the density matrix (only mixed)
     @property
     def density(self):
         if self._density_matrix is None:
             raise ValueError("State is not in density form.")
         return self._density_matrix
 
+    #Make state pure and normalize
     def set_pure(self, vec: np.ndarray):
         if vec.shape != (self.dim,):
             raise ValueError(f"State vector must have shape {(self.dim,)}.")
@@ -75,6 +79,7 @@ class QuantumState:
         self._state_vector = np.array(vec, dtype=complex)
         self._density_matrix = None
 
+    #set state as density matrix and validate Hermiticity and renormalize
     def set_mixed(self, rho: np.ndarray):
         if rho.shape != (self.dim, self.dim):
             raise ValueError(f"Density matrix must have shape {(self.dim, self.dim)}.")
@@ -82,7 +87,7 @@ class QuantumState:
             raise ValueError("Density matrix must be Hermitian.")
         trace = np.trace(rho)
         if not np.isclose(trace, 1.0):
-            rho = rho / trace  # renormalize gently
+            rho = rho / trace  # renormalize
         self._density_matrix = np.array(rho, dtype=complex)
         self._state_vector = None
 
@@ -100,17 +105,20 @@ class QuantumState:
             self._state_vector = None
         return self
 
+    # apply a unitary operator
     def apply_unitary(self, operator):
-        """Apply unitary to the state in-place."""
         if self._state_vector is not None:
+            # U|ψ⟩ pure state
             self._state_vector = operator @ self.vector
         else:
+            #UρU† for mixed states
             rho = self.density
             self._density_matrix = operator @ rho @ operator.conj().T
         return self
 
+
+    #Return probability distribution over measurement outcomes of selected qubits
     def probabilities(self, qubits: Iterable[int]) -> np.ndarray:
-        """Return probability distribution over measurement outcomes of selected qubits."""
         qubits = list(qubits)
         rho = self.as_density_matrix()
         probs = np.zeros(2 ** len(qubits))
@@ -137,5 +145,3 @@ class QuantumState:
     def maybe_sparse(self, arr: np.ndarray):
         """Convert array to sparse if threshold exceeded."""
         return _as_sparse_if_needed(arr, self.use_sparse)
-
-
