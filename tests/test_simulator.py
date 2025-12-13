@@ -30,3 +30,20 @@ def test_noise_bit_flip():
     probs = sim.state.probabilities([0])
     assert probs[1] > 0.99
 
+
+# test that measuring a qubit collapses the state to the correct post-measurement density matrix
+def test_measurement_collapse_pure_and_mixed():
+    sim = QuantumSimulator(num_qubits=1, rng=np.random.default_rng(0))
+    sim.apply_gate(gates.H, target=0)
+
+    # Measure -> should collapse to |0> or |1>
+    outcome, post = sim.measure([0])
+    rho = post.as_density_matrix()
+
+    if outcome == 0:
+        expected = np.array([[1, 0],
+                             [0, 0]], dtype=complex)
+    else:
+        expected = np.array([[0, 0],
+                             [0, 1]], dtype=complex)
+    assert np.allclose(rho, expected), "Post-measurement state mismatch"
