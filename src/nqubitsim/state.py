@@ -41,7 +41,7 @@ class QuantumState:
             zero[0] = 1.0
             self.set_pure(zero)
 
-    @property
+    @property #TODO: verwijderen
     def is_density(self) -> bool:
         return self._density_matrix is not None
     
@@ -55,14 +55,14 @@ class QuantumState:
         )
 
     #Return the vector (only pure)
-    @property
+    @property #TODO verwijderen
     def vector(self) -> np.ndarray:
         if self._state_vector is None:
             raise ValueError("State is not in pure form.")
         return self._state_vector
 
     #return the density matrix (only mixed)
-    @property
+    @property #TODO: verwijderen
     def density(self):
         if self._density_matrix is None:
             raise ValueError("State is not in density form.")
