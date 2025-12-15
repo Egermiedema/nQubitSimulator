@@ -52,7 +52,9 @@ SWAP = np.array(
 
 
 def expand_single_qubit_gate(gate: np.ndarray, target: int, num_qubits: int, use_sparse: bool = False):
-    """Kronecker-expand a 2x2 gate to an n-qubit operator."""
+    """Kronecker-expand a 2x2 gate.
+     function takes a single-qubit quantum gate (represented as a 2×2 NumPy array) 
+     and expands it into a full operator that acts on an n-qubit quantum system."""
     if gate.shape != (2, 2):
         raise ValueError("Single-qubit gate must be 2x2.")
     if target < 0 or target >= num_qubits:
