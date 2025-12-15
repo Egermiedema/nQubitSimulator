@@ -55,15 +55,23 @@ def expand_single_qubit_gate(gate: np.ndarray, target: int, num_qubits: int, use
     """Kronecker-expand a 2x2 gate.
      function takes a single-qubit quantum gate (represented as a 2×2 NumPy array) 
      and expands it into a full operator that acts on an n-qubit quantum system."""
+    
+    # Checks that gate is exactly 2×2.
     if gate.shape != (2, 2):
         raise ValueError("Single-qubit gate must be 2x2.")
     if target < 0 or target >= num_qubits:
         raise ValueError("Target out of range.")
 
+    # Creates a list factors where each element is either the input gate 
+    # (for the target qubit) or the identity matrix I
     factors = []
     for qubit in range(num_qubits):
         factors.append(gate if qubit == target else I)
 
+
+    # Iteratively applies the Kronecker product (np.kron or sparse.kron) with each subsequent factor.
+    # Result: A full operator like I ⊗ I ⊗ ... ⊗ gate ⊗ ... ⊗ I, 
+    # where the gate is positioned at the target qubit.
     op = factors[0]
     for factor in factors[1:]:
         op = np.kron(op, factor) if not use_sparse else sparse.kron(op, factor, format="csr")
