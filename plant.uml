@@ -2,7 +2,7 @@
 title n-Qubit Simulator — Class Diagram
 
 package "nqubitsim.gates" <<module>> {
-class Gates {
+class Gates <<utility>> {
 +I, X, Y, Z, H, S, T : ndarray
 +phase(theta): ndarray
 +CNOT, CZ, SWAP : ndarray
@@ -16,35 +16,36 @@ package "nqubitsim.state" <<module>> {
 class QuantumState {
 +num_qubits: int
 +sparse_threshold: int
--_state_vector
--_density_matrix
 +dim: int
 +use_sparse: bool
-+post_init()
+-_state_vector: ndarray?
+-_density_matrix: ndarray?
++__post_init__()
 +is_density(): bool
 +copy(): QuantumState
 +vector(): ndarray
 +density(): ndarray
 +set_pure(vec)
 +set_mixed(rho)
-+as_density_matrix()
-+promote_to_density()
-+apply_unitary(operator)
++as_density_matrix(): ndarray
++promote_to_density(): QuantumState
++apply_unitary(operator): QuantumState
 +probabilities(qubits): ndarray
-+_projector(qubits, bits)
+##_projector(qubits, bits): ndarray
 +maybe_sparse(arr)
 }
 }
 
 package "nqubitsim.measurement" <<module>> {
-class Measurement {
+class Measurement <<utility>> {
+##_expand_operator_on_qubits(op, qubits, num_qubits): ndarray
 +projective_measure(state: QuantumState, qubits, basis=None, rng=None)
 +povm_measure(state: QuantumState, operators, qubits=None, rng=None)
 }
 }
 
 package "nqubitsim.noise" <<module>> {
-class Noise {
+class Noise <<utility>> {
 +apply_bit_flip(state: QuantumState, p, rng=None)
 +apply_depolarizing(state: QuantumState, p)
 }
@@ -52,28 +53,27 @@ class Noise {
 
 package "nqubitsim" <<module>> {
 class QuantumSimulator {
--num_qubits: int
--rng
--noise_cfg: dict
--state: QuantumState
--classical_register: list<int>
-+init(num_qubits, sparse_threshold=..., noise=None, rng=None)
-+_apply_noise()
-+apply_gate(gate, target)
-+apply_controlled_gate(gate, control, target)
++num_qubits: int
++rng: Generator
++noise_cfg: dict
++state: QuantumState
++classical_register: list<int>
++__init__(num_qubits, sparse_threshold=2**10, noise=None, rng=None)
+##_apply_noise()
++apply_gate(gate, target): QuantumSimulator
++apply_controlled_gate(gate, control, target): QuantumSimulator
 +measure(qubits, basis=None)
 +povm(operators, qubits=None)
-+reset()
++reset(): QuantumSimulator
 }
 }
 
 ' Relationships
-QuantumSimulator -- QuantumState : owns
-QuantumSimulator ..> Gates : uses expand_ and gate constants
-QuantumSimulator ..> Measurement : uses projective_measure / povm_measure
-QuantumSimulator ..> Noise : uses apply_* (noise)
-
-Measurement ..> QuantumState : reads/updates, returns post_state
+QuantumSimulator *-- QuantumState : owns
+QuantumSimulator ..> Gates : uses gate defs & expand_*
+QuantumSimulator ..> Measurement : uses projective_measure/povm_measure
+QuantumSimulator ..> Noise : delegates noise hooks
+Measurement ..> QuantumState : reads/updates
 Noise ..> QuantumState : mutates/promotes density
-Noise ..> Gates : uses expand_single_qubit_gate / X
+Noise ..> Gates : uses expand_single_qubit_gate & X
 @enduml
