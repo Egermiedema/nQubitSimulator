@@ -31,8 +31,8 @@ def main():
     # Reproducible Random Number Generator for deterministic output
     rng = np.random.default_rng(42)
 
-    #sim = QuantumSimulator(num_qubits=2, noise={"bit_flip": 0.02, "depolarizing": 0.05}, rng=rng)
-    sim = QuantumSimulator(num_qubits=2, noise= None, rng=rng)
+    sim = QuantumSimulator(num_qubits=2, noise={"bit_flip": 0.02, "depolarizing": 0.05}, rng=rng)
+    #sim = QuantumSimulator(num_qubits=2, noise= None, rng=rng)
     prepare_bell_pair(sim)
 
     # Show state probabilities before measurement
