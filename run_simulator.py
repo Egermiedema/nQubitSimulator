@@ -2,6 +2,7 @@ import pathlib
 import sys
 import numpy as np
 
+
 # Ensure src/ is on path when running directly from repo
 # Added because the import of the nqubitsim woulf fail sometimes
 ROOT = pathlib.Path(__file__).resolve().parent
@@ -9,18 +10,25 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
+
+
+
+# import our library: nqubitsim
 from nqubitsim import gates
 from nqubitsim.simulator import QuantumSimulator
 
 
 def prepare_bell_pair(sim: QuantumSimulator):
     """Create (|00> + |11>) / sqrt(2) on qubits 0 and 1."""
+
+    # perform a H gate on qubit 0.
     sim.apply_gate(gates.H, target=0)
+    # perform a CNOT with control qubit 0 and target qubit 1.
     sim.apply_controlled_gate(gates.CNOT, control=0, target=1)
 
 
 def main():
-    # Reproducible RNG for deterministic output
+    # Reproducible Random Number Generator for deterministic output
     rng = np.random.default_rng(42)
 
     sim = QuantumSimulator(num_qubits=2, noise={"bit_flip": 0.02, "depolarizing": 0.05}, rng=rng)
