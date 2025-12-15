@@ -22,15 +22,19 @@ def apply_bit_flip(state: QuantumState, p: float, rng=None):
     return state
 
 
+#Apply a depolarizing noise channel:
+#E(rho) = (1 - p) * rho + (p / d) * I
+#where d = 2^n.
 def apply_depolarizing(state: QuantumState, p: float):
-    """Apply depolarizing channel E(rho) = (1-p) rho + p * I / d."""
     if p <= 0:
         return state
+
     state.promote_to_density()
     d = 2 ** state.num_qubits
+
     rho = state.density
-    identity = np.eye(d, dtype=complex)
-    new_rho = (1 - p) * rho + (p / d) * identity
+    I = np.eye(d, dtype=complex)
+
+    new_rho = (1 - p) * rho + (p / d) * I
     state.set_mixed(new_rho)
     return state
-
