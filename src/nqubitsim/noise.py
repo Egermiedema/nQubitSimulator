@@ -1,11 +1,8 @@
 """Noise channels (bit-flip, depolarizing) and helpers."""
 
 from __future__ import annotations
-
 from typing import Iterable, Sequence
-
 import numpy as np
-
 from . import gates
 from .state import QuantumState
 
@@ -14,8 +11,10 @@ def apply_bit_flip(state: QuantumState, p: float, rng=None):
     """Apply bit-flip (Pauli-X) to each qubit with probability p."""
     if p <= 0:
         return state
+    
     rng = rng or np.random.default_rng()
     for q in range(state.num_qubits):
+        
         if rng.random() < p:
             op = gates.expand_single_qubit_gate(gates.X, q, state.num_qubits, use_sparse=state.use_sparse)
             state.apply_unitary(op)

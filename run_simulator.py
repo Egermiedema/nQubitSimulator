@@ -60,3 +60,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# nico's github for noise and stuff
+# https://github.com/nicokuijpers/QuantumSim/blob/main/QuantumSimNoise.ipynb
