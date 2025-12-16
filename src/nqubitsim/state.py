@@ -9,6 +9,10 @@ import numpy as np
 from scipy import sparse
 
 
+# might remove later due to this limit being reached only for 10 qubits and higher.
+# 10 qubits is probably already enough and a little bit slow is okay.
+
+# Convert a NumPy array into a sparse matrix if the system is large.
 def _as_sparse_if_needed(arr: np.ndarray, use_sparse: bool):
     if not use_sparse:
         return arr
@@ -17,7 +21,7 @@ def _as_sparse_if_needed(arr: np.ndarray, use_sparse: bool):
     return sparse.csr_matrix(arr)
 
 
-@dataclass
+@dataclass #TODO verwijderen
 class QuantumState:
     num_qubits: int
     sparse_threshold: int = 2**10  # switch to sparse when dimension >= threshold
@@ -26,8 +30,8 @@ class QuantumState:
 
     #initialize state from vector V density matrix V default(|0...0>)
     def __post_init__(self):
-        self.dim = 2 ** self.num_qubits
-        self.use_sparse = self.dim >= self.sparse_threshold
+        self.dim = 2 ** self.num_qubits # Compute Hilbert space dimension:
+        self.use_sparse = self.dim >= self.sparse_threshold # Determine if sparse is needed.
 
         if self._state_vector is not None and self._density_matrix is not None:
             raise ValueError("Provide only one of state_vector or density_matrix.")
@@ -39,13 +43,13 @@ class QuantumState:
         else:
             zero = np.zeros(self.dim, dtype=complex)
             zero[0] = 1.0
-            self.set_pure(zero)
+            self.set_pure(zero) # Default to |0...0> state.
 
     @property #TODO: verwijderen
     def is_density(self) -> bool:
-        return self._density_matrix is not None
+        return self._density_matrix is not None # True if state is in density matrix form.
     
-    #Make a copy of the "QuantumState"
+    #Make a copy of the "QuantumState" saving stuff such as num_qubits and representation (pure vs mixed)
     def copy(self) -> "QuantumState":
         return QuantumState(
             num_qubits=self.num_qubits,
@@ -72,9 +76,13 @@ class QuantumState:
     def set_pure(self, vec: np.ndarray):
         if vec.shape != (self.dim,):
             raise ValueError(f"State vector must have shape {(self.dim,)}.")
-        norm = np.linalg.norm(vec)
-        if norm == 0:
-            raise ValueError("State vector cannot be zero.")
+        norm = np.linalg.norm(vec) # numpy function to normalize vectors
+
+        if norm < 1e-15:
+            raise ValueError("State vector cannot be (near) zero.") 
+        # floating point numbers almost never give exactl zero. 
+        # passing vector of extremely small numbers is meaningless due to floating point precision limits.
+        
         vec = vec / norm
         self._state_vector = np.array(vec, dtype=complex)
         self._density_matrix = None
@@ -96,9 +104,10 @@ class QuantumState:
             return self._density_matrix
         # |psi><psi|
         vec = self.vector.reshape(-1, 1)
-        return vec @ vec.conj().T
+        return vec @ vec.conj().T # @ is matrix multiplication operator in numpy. you learn new stuff every day!
 
-    def promote_to_density(self):
+
+    def promote_to_density(self): # promote pure state to density matrix
         """Convert to density matrix representation in-place."""
         if self._density_matrix is None:
             self._density_matrix = self.as_density_matrix()
@@ -142,6 +151,8 @@ class QuantumState:
             op = proj if op is None else np.kron(op, proj)
         return op
 
+    # might remove later due to this limit being reached only for 10 qubits and higher.
+    # 10 qubits is probably already enough and a little bit slow is okay.
     def maybe_sparse(self, arr: np.ndarray):
         """Convert array to sparse if threshold exceeded."""
         return _as_sparse_if_needed(arr, self.use_sparse)
