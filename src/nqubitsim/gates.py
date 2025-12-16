@@ -72,6 +72,8 @@ def expand_single_qubit_gate(gate: np.ndarray, target: int, num_qubits: int, use
     # Iteratively applies the Kronecker product (np.kron or sparse.kron) with each subsequent factor.
     # Result: A full operator like I ⊗ I ⊗ ... ⊗ gate ⊗ ... ⊗ I, 
     # where the gate is positioned at the target qubit.
+    # example for 3 qubits and target 1: I ⊗ gate ⊗ I. 
+    # produces size 8x8 matrix. (2^3 x 2^3)
     op = factors[0]
     for factor in factors[1:]:
         op = np.kron(op, factor) if not use_sparse else sparse.kron(op, factor, format="csr")

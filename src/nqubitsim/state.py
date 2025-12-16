@@ -130,11 +130,11 @@ class QuantumState:
     def probabilities(self, qubits: Iterable[int]) -> np.ndarray:
         qubits = list(qubits)
         rho = self.as_density_matrix()
-        probs = np.zeros(2 ** len(qubits))
+        probs = np.zeros(2 ** len(qubits)) # Initialize probability array (with zeros)
         for outcome in range(2 ** len(qubits)):
             bitstring = [(outcome >> (len(qubits) - 1 - i)) & 1 for i in range(len(qubits))]
-            projector = self._projector(qubits, bitstring)
-            probs[outcome] = np.real(np.trace(projector @ rho))
+            projector = self._projector(qubits, bitstring) # Build projector for this outcome
+            probs[outcome] = np.real(np.trace(projector @ rho)) # Compute probability p = Tr(Pρ)
         return probs
 
     def _projector(self, qubits: List[int], bits: List[int]):
@@ -144,8 +144,7 @@ class QuantumState:
             if q in qubits:
                 idx = qubits.index(q)
                 proj = np.array([[1, 0], [0, 0]], dtype=complex) if bits[idx] == 0 else np.array(
-                    [[0, 0], [0, 1]], dtype=complex
-                )
+                    [[0, 0], [0, 1]], dtype=complex)
             else:
                 proj = np.eye(2, dtype=complex)
             op = proj if op is None else np.kron(op, proj)
