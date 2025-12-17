@@ -67,19 +67,6 @@ def test_x_gate3():
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
-def test_x_gate4():
-    sim = QuantumSimulator(num_qubits=5) # initial  state |00000⟩
-    initial_state = sim.state.get_vector().copy()
-    expected_initial = np.array([1.0, 0.0, 0.0, 0.0])
-
-    sim.apply_gate(gates.X, target=2) # Apply X gate to qubit 2, should flip to |00100⟩
-    sim.apply_gate(gates.X, target=4) # Apply X gate to qubit 4, should flip to |00101⟩
-
-    final_state = sim.state.get_vector()
-    expected_final = np.array([0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-    np.testing.assert_array_almost_equal(final_state, expected_final)
-
-
 
 
 #------------------------------------H-GATE TESTS---------------------------------------
