@@ -43,7 +43,7 @@ def main():
     outcome, post = sim.measure([0, 1])
     print(f"Measured outcome (integer index): {outcome}")
     print("Classical register:", sim.classical_register)
-    print("Post-measurement density matrix:\n", post.density)
+    print("Post-measurement density matrix:\n", post.get_density())
 
     # Reset and run multiple shots to illustrate sampling
     sim.reset()

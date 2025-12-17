@@ -28,13 +28,13 @@ def test_x_gate1():
     sim = QuantumSimulator(num_qubits=1)
     
     # Initial state should be |0⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply X gate (Pauli-X flips |0⟩ to |1⟩)
     sim.apply_gate(gates.X, target=0)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([0.0, 1.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -44,13 +44,13 @@ def test_x_gate2():
     sim = QuantumSimulator(num_qubits=2)
     
     # Initial state should be |00⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply X gate to qubit 0 (flips |00⟩ to |01⟩)
     sim.apply_gate(gates.X, target=1)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([0.0, 1.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -60,13 +60,13 @@ def test_x_gate3():
     sim = QuantumSimulator(num_qubits=2)
     
     # Initial state should be |00⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply X gate to qubit 0 (flips |00⟩ to |10⟩)
     sim.apply_gate(gates.X, target=0)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([0.0, 0.0, 1.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -77,13 +77,13 @@ def test_H_gate1():
     sim = QuantumSimulator(num_qubits=1)
     
     # Initial state should be |0⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply H gate (Hadamard transforms |0⟩ to (|1⟩ + |1⟩)/√2)
     sim.apply_gate(gates.H, target=0)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([1.0, 1.0], dtype=complex) / np.sqrt(2)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -92,13 +92,13 @@ def test_H_gate2():
     sim = QuantumSimulator(num_qubits=2)
     
     # Initial state should be |00⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply H gate to qubit 0 
     sim.apply_gate(gates.H, target=0)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([1.0, 0.0, 1.0, 0.0], dtype=complex) / np.sqrt(2)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -107,13 +107,13 @@ def test_H_gate3():
     sim = QuantumSimulator(num_qubits=2)
     
     # Initial state should be |00⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply H gate to qubit 1
     sim.apply_gate(gates.H, target=1)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([1.0, 1.0, 0.0, 0.0], dtype=complex) / np.sqrt(2)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -124,13 +124,13 @@ def test_Y_gate1():
     sim = QuantumSimulator(num_qubits=1)
     
     # Initial state should be |0⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply Y gate (Pauli-Y flips |0⟩ to i|1⟩)
     sim.apply_gate(gates.Y, target=0)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([0.0, 1.0j], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -140,13 +140,13 @@ def test_Y_gate2():
     sim = QuantumSimulator(num_qubits=2)
     
     # Initial state should be |00⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply Y gate to qubit 0 (flips |00⟩ to i|10⟩)
     sim.apply_gate(gates.Y, target=0)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([0.0, 0.0, 1.0j, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)   
 
@@ -156,13 +156,13 @@ def test_Y_gate3():
     sim = QuantumSimulator(num_qubits=2)
     
     # Initial state should be |00⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply Y gate to qubit 1 (flips |00⟩ to i|01⟩)
     sim.apply_gate(gates.Y, target=1)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([0.0, 1.0j, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -173,13 +173,13 @@ def test_Z_gate1():
     sim = QuantumSimulator(num_qubits=1)
     
     # Initial state should be |0⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply Z gate (Pauli-Z leaves |0⟩ unchanged)
     sim.apply_gate(gates.Z, target=0)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([1.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)   
 
@@ -189,13 +189,13 @@ def test_Z_gate4():
     sim.apply_gate(gates.X, target=0) # Start in |1⟩ by applying X first
 
     # Initial state should be |1⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([0.0, 1.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply Z gate (Pauli-Z flips |1⟩ to -|1⟩)
     sim.apply_gate(gates.Z, target=0)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([0.0, -1.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)   
 
@@ -205,13 +205,13 @@ def test_Z_gate2():
     sim = QuantumSimulator(num_qubits=2)
     
     # Initial state should be |00⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply Z gate to qubit 0 (leaves |00⟩ unchanged)
     sim.apply_gate(gates.Z, target=0)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -221,13 +221,13 @@ def test_Z_gate3():
     sim = QuantumSimulator(num_qubits=2)
     
     # Initial state should be |00⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply Z gate to qubit 1 (leaves |00⟩ unchanged)
     sim.apply_gate(gates.Z, target=1)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -238,13 +238,13 @@ def test_S_gate1():
     sim = QuantumSimulator(num_qubits=1)
     
     # Initial state should be |0⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([1.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply S gate (Phase gate leaves |0⟩ unchanged)
     sim.apply_gate(gates.S)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([1.0, 0.0], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -254,13 +254,13 @@ def test_S_gate2():
     sim.apply_gate(gates.X) # Start in |1⟩ by applying X first
 
     # Initial state should be |1⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([0.0, 1.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply S gate (Phase gate transforms |1⟩ to i|1⟩)
     sim.apply_gate(gates.S)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([0.0, 0.0 + 1.0j], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
@@ -270,13 +270,13 @@ def test_S_gate3():
     sim.apply_gate(gates.X, target=1) # Now in |11⟩
     
     # Initial state should be |11⟩
-    initial_state = sim.state.vector.copy()
+    initial_state = sim.state.get_vector().copy()
     expected_initial = np.array([0.0, 0.0, 0.0, 1.0], dtype=complex)
     np.testing.assert_array_almost_equal(initial_state, expected_initial)
     
     # Apply S gate to qubit 1 (leaves |11⟩ unchanged)
     sim.apply_gate(gates.S)
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected_final = np.array([0.0, 0.0, 0.0, 0.0 + 1.0j], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 

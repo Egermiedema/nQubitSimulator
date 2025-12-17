@@ -31,7 +31,7 @@ def apply_depolarizing(state: QuantumState, p: float):
     state.promote_to_density()
     d = 2 ** state.num_qubits
 
-    rho = state.density
+    rho = state.get_density()
     I = np.eye(d, dtype=complex)
 
     new_rho = (1 - p) * rho + (p / d) * I

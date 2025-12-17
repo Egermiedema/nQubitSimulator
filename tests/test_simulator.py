@@ -97,7 +97,7 @@ def test_hzh_interference_scenario():
     sim.apply_gate(gates.H, target=0)
 
     # HZH |0> = |1>
-    final_state = sim.state.vector
+    final_state = sim.state.get_vector()
     expected = np.array([0.0, 1.0], dtype=complex)
 
     np.testing.assert_array_almost_equal(final_state, expected)
@@ -129,5 +129,5 @@ def test_simulator_reset_and_reuse():
 
     # Should be back to |00>
     expected = np.array([1, 0, 0, 0], dtype=complex)
-    np.testing.assert_array_almost_equal(sim.state.vector, expected)
+    np.testing.assert_array_almost_equal(sim.state.get_vector(), expected)
     assert sim.classical_register == []

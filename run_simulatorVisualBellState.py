@@ -153,7 +153,7 @@ def main():
         probs=probs,
         outcome=outcome,
         classical_reg=sim.classical_register,
-        rho=post_state.density,
+        rho=post_state.get_density(),
         seed=seed
     )
 

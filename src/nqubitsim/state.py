@@ -29,20 +29,18 @@ class QuantumState:
     def copy(self) -> "QuantumState":
         return QuantumState(
             num_qubits=self.num_qubits,
-            _state_vector=None if self._state_vector is None else self.vector.copy(),
-            _density_matrix=None if self._density_matrix is None else self.density.copy(),
+            _state_vector=None if self._state_vector is None else self.get_vector().copy(),
+            _density_matrix=None if self._density_matrix is None else self.get_density().copy(),
         )
 
     #Return the vector (only pure)
-    @property
-    def vector(self) -> np.ndarray:
+    def get_vector(self) -> np.ndarray:
         if self._state_vector is None:
             raise ValueError("State is not in pure form.")
         return self._state_vector
 
     #return the density matrix (only mixed)
-    @property 
-    def density(self) -> np.ndarray:
+    def get_density(self) -> np.ndarray:
         if self._density_matrix is None:
             raise ValueError("State is not in density form.")
         return self._density_matrix
@@ -78,7 +76,7 @@ class QuantumState:
         if self._density_matrix is not None:
             return self._density_matrix
         # |psi><psi|
-        vec = self.vector.reshape(-1, 1)
+        vec = self.get_vector().reshape(-1, 1)
         return vec @ vec.conj().T # @ is matrix multiplication operator in numpy. you learn new stuff every day!
 
 
@@ -93,10 +91,10 @@ class QuantumState:
     def apply_unitary(self, operator):
         if self._state_vector is not None:
             # U|ψ⟩ pure state
-            self._state_vector = operator @ self.vector
+            self._state_vector = operator @ self.get_vector()
         else:
             #UρU† for mixed states
-            rho = self.density
+            rho = self.get_density()
             self._density_matrix = operator @ rho @ operator.conj().T
         return self
 

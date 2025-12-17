@@ -68,7 +68,7 @@ def expand_single_qubit_gate(gate: np.ndarray, target: int, num_qubits: int):
         factors.append(gate if qubit == target else I)
 
 
-    # Iteratively applies the Kronecker product with each subsequent factor.
+    #iterativly applies the Kronecker product with each subsequent factor.
     # Result: A full operator like I ⊗ I ⊗ ... ⊗ gate ⊗ ... ⊗ I, 
     # where the gate is positioned at the target qubit.
     # example for 3 qubits and target 1: I ⊗ gate ⊗ I. 
