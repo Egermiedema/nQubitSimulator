@@ -15,8 +15,8 @@ d = 2^n
 $$
 
 A quantum state is represented either as:
-- a **state vector** \( |\psi\rangle \in \mathbb{C}^{2^n} \) (pure state), or
-- a **density matrix** \( \rho \in \mathbb{C}^{2^n \times 2^n} \) (mixed state)
+- a **state vector** $( |\psi\rangle \in \mathbb{C}^{2^n} \)$ (pure state), or
+- a **density matrix** $( \rho \in \mathbb{C}^{2^n \times 2^n} \)$ (mixed state)
 
 The density matrix satisfies:
 
