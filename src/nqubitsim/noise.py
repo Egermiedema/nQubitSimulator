@@ -16,7 +16,7 @@ def apply_bit_flip(state: QuantumState, p: float, rng=None):
     for q in range(state.num_qubits):
         
         if rng.random() < p:
-            op = gates.expand_single_qubit_gate(gates.X, q, state.num_qubits, use_sparse=state.use_sparse)
+            op = gates.expand_single_qubit_gate(gates.X, q, state.num_qubits)
             state.apply_unitary(op)
     return state
 

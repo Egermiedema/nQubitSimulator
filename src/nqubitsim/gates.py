@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import numpy as np
-from scipy import sparse
 
 # Base single-qubit gates (2x2)
 I = np.array([[1, 0], [0, 1]], dtype=complex)
@@ -51,7 +50,7 @@ SWAP = np.array(
 )
 
 
-def expand_single_qubit_gate(gate: np.ndarray, target: int, num_qubits: int, use_sparse: bool = False):
+def expand_single_qubit_gate(gate: np.ndarray, target: int, num_qubits: int):
     """Kronecker-expand a 2x2 gate.
      function takes a single-qubit quantum gate (represented as a 2×2 NumPy array) 
      and expands it into a full operator that acts on an n-qubit quantum system."""
@@ -69,18 +68,18 @@ def expand_single_qubit_gate(gate: np.ndarray, target: int, num_qubits: int, use
         factors.append(gate if qubit == target else I)
 
 
-    # Iteratively applies the Kronecker product (np.kron or sparse.kron) with each subsequent factor.
+    # Iteratively applies the Kronecker product with each subsequent factor.
     # Result: A full operator like I ⊗ I ⊗ ... ⊗ gate ⊗ ... ⊗ I, 
     # where the gate is positioned at the target qubit.
     # example for 3 qubits and target 1: I ⊗ gate ⊗ I. 
     # produces size 8x8 matrix. (2^3 x 2^3)
     op = factors[0]
     for factor in factors[1:]:
-        op = np.kron(op, factor) if not use_sparse else sparse.kron(op, factor, format="csr")
+        op = np.kron(op, factor)
     return op
 
 
-def expand_two_qubit_gate(gate: np.ndarray, control: int, target: int, num_qubits: int, use_sparse: bool = False):
+def expand_two_qubit_gate(gate: np.ndarray, control: int, target: int, num_qubits: int):
     """Expand a 4x4 two-qubit gate to an n-qubit operator.
 
     This implementation is correctness-first and keeps ordering consistent
@@ -95,7 +94,7 @@ def expand_two_qubit_gate(gate: np.ndarray, control: int, target: int, num_qubit
 
     targets = (control, target)
     dim = 2 ** num_qubits
-    op = sparse.dok_matrix((dim, dim), dtype=complex) if use_sparse else np.zeros((dim, dim), dtype=complex)
+    op = np.zeros((dim, dim), dtype=complex)
 
     def bits(val: int):
         return [(val >> (num_qubits - 1 - q)) & 1 for q in range(num_qubits)]
@@ -115,7 +114,7 @@ def expand_two_qubit_gate(gate: np.ndarray, control: int, target: int, num_qubit
                 continue
             op[row, col] = val
 
-    return op.tocsr() if use_sparse else op
+    return op
 
 
 #Check if a matrix is unitary: U*U† = I.

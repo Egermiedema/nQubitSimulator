@@ -18,11 +18,11 @@ class QuantumSimulator:
     """
 
     # Initialize simulator with number of qubits, optional noise config, and Randon Number Generator.
-    def __init__(self, num_qubits: int, sparse_threshold: int = 2**10, noise: dict | None = None, rng=None):
+    def __init__(self, num_qubits: int, noise: dict | None = None, rng=None):
         self.num_qubits = num_qubits
         self.rng = rng or np.random.default_rng()
         self.noise_cfg = noise or {}
-        self.state = QuantumState(num_qubits=num_qubits, sparse_threshold=sparse_threshold)
+        self.state = QuantumState(num_qubits=num_qubits)
         self.classical_register: list[int] = []
 
     # calls function to apply noise after gates
@@ -37,7 +37,7 @@ class QuantumSimulator:
     # Apply a single-qubit gate to target qubit
     def apply_gate(self, gate: np.ndarray, target: int):
         """Apply a single-qubit gate to target qubit."""
-        op = gates.expand_single_qubit_gate(gate, target, self.num_qubits, use_sparse=self.state.use_sparse)
+        op = gates.expand_single_qubit_gate(gate, target, self.num_qubits)
         self.state.apply_unitary(op)
         self._apply_noise()
         return self
@@ -45,7 +45,7 @@ class QuantumSimulator:
     # Apply a two-qubit gate with given control and target
     def apply_controlled_gate(self, gate: np.ndarray, control: int, target: int):
         """Apply a two-qubit gate with given control and target."""
-        op = gates.expand_two_qubit_gate(gate, control, target, self.num_qubits, use_sparse=self.state.use_sparse)
+        op = gates.expand_two_qubit_gate(gate, control, target, self.num_qubits)
         self.state.apply_unitary(op)
         self._apply_noise()
         return self
@@ -67,7 +67,7 @@ class QuantumSimulator:
     # Reset simulator to initial state
     def reset(self):
         """Reset to |0...0> and clear classical register."""
-        self.state = QuantumState(num_qubits=self.num_qubits, sparse_threshold=self.state.sparse_threshold)
+        self.state = QuantumState(num_qubits=self.num_qubits)
         self.classical_register = []
         return self
 

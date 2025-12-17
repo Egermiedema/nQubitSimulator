@@ -84,7 +84,7 @@ def projective_measure(state: QuantumState, qubits: Iterable[int], basis: Sequen
     p_out = probs[outcome]
     new_rho = new_rho / p_out if p_out > 0 else new_rho
 
-    new_state = QuantumState(state.num_qubits, sparse_threshold=state.sparse_threshold, _density_matrix=new_rho)
+    new_state = QuantumState(state.num_qubits, _density_matrix=new_rho)
     # update original state
     state.set_mixed(new_rho)
     return outcome, new_state
@@ -124,7 +124,7 @@ def povm_measure(state: QuantumState, operators: Sequence[np.ndarray], qubits: I
     p_out = probs[outcome]
     new_rho = new_rho / p_out if p_out > 0 else new_rho
 
-    new_state = QuantumState(state.num_qubits, sparse_threshold=state.sparse_threshold, _density_matrix=new_rho)
+    new_state = QuantumState(state.num_qubits, _density_matrix=new_rho)
     state.set_mixed(new_rho)
     return outcome, new_state
 

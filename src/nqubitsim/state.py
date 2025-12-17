@@ -6,32 +6,18 @@ from dataclasses import dataclass
 from typing import Iterable, List, Optional, Sequence
 
 import numpy as np
-from scipy import sparse
 
-
-# might remove later due to this limit being reached only for 10 qubits and higher.
-# 10 qubits is probably already enough and a little bit slow is okay.
-
-# Convert a NumPy array into a sparse matrix if the system is large.
-def _as_sparse_if_needed(arr: np.ndarray, use_sparse: bool):
-    if not use_sparse:
-        return arr
-    if arr.ndim == 1:
-        return sparse.csr_matrix(arr.reshape(-1, 1))
-    return sparse.csr_matrix(arr)
 
 
 @dataclass #TODO verwijderen
 class QuantumState:
     num_qubits: int
-    sparse_threshold: int = 2**10  # switch to sparse when dimension >= threshold
     _state_vector: Optional[np.ndarray] = None
     _density_matrix: Optional[np.ndarray] = None
 
     #initialize state from vector V density matrix V default(|0...0>)
     def __post_init__(self):
         self.dim = 2 ** self.num_qubits # Compute Hilbert space dimension:
-        self.use_sparse = self.dim >= self.sparse_threshold # Determine if sparse is needed.
 
         if self._state_vector is not None and self._density_matrix is not None:
             raise ValueError("Provide only one of state_vector or density_matrix.")
@@ -53,7 +39,6 @@ class QuantumState:
     def copy(self) -> "QuantumState":
         return QuantumState(
             num_qubits=self.num_qubits,
-            sparse_threshold=self.sparse_threshold,
             _state_vector=None if self._state_vector is None else self.vector.copy(),
             _density_matrix=None if self._density_matrix is None else self.density.copy(),
         )
@@ -149,9 +134,3 @@ class QuantumState:
                 proj = np.eye(2, dtype=complex)
             op = proj if op is None else np.kron(op, proj)
         return op
-
-    # might remove later due to this limit being reached only for 10 qubits and higher.
-    # 10 qubits is probably already enough and a little bit slow is okay.
-    def maybe_sparse(self, arr: np.ndarray):
-        """Convert array to sparse if threshold exceeded."""
-        return _as_sparse_if_needed(arr, self.use_sparse)
