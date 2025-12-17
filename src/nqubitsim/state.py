@@ -7,29 +7,25 @@ from typing import Iterable, List, Optional, Sequence
 
 import numpy as np
 
-
-
-@dataclass #TODO verwijderen
 class QuantumState:
-    num_qubits: int
-    _state_vector: Optional[np.ndarray] = None
-    _density_matrix: Optional[np.ndarray] = None
+    def __init__(self, num_qubits: int,
+                 _state_vector: Optional[np.ndarray] = None,
+                 _density_matrix: Optional[np.ndarray] = None):
 
-    #initialize state from vector V density matrix V default(|0...0>)
-    def __post_init__(self):
-        self.dim = 2 ** self.num_qubits # Compute Hilbert space dimension:
+        self.num_qubits = num_qubits
+        self.dim = 2 ** num_qubits  # Hilbert space dimension
 
-        if self._state_vector is not None and self._density_matrix is not None:
+        if _state_vector is not None and _density_matrix is not None:
             raise ValueError("Provide only one of state_vector or density_matrix.")
 
-        if self._state_vector is not None:
-            self.set_pure(self._state_vector)
-        elif self._density_matrix is not None:
-            self.set_mixed(self._density_matrix)
+        if _state_vector is not None:
+            self.set_pure(_state_vector)
+        elif _density_matrix is not None:
+            self.set_mixed(_density_matrix)
         else:
             zero = np.zeros(self.dim, dtype=complex)
             zero[0] = 1.0
-            self.set_pure(zero) # Default to |0...0> state.
+            self.set_pure(zero)  # Default to |0...0>
 
     @property #TODO: verwijderen
     def is_density(self) -> bool:
