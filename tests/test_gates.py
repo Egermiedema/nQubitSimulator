@@ -312,6 +312,34 @@ def test_T_gate2():
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
+def test_phase_gate_on_zero():
+    sim = QuantumSimulator(num_qubits=1)
+
+    theta = np.pi / 2
+    sim.apply_gate(gates.phase(theta), target=0)
+
+    # |0> should be unchanged
+    expected = np.array([1.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(sim.state.get_vector(), expected)
+    
+
+def test_phase_gate_on_one():
+    sim = QuantumSimulator(num_qubits=1)
+
+    # Start from |1>
+    sim.apply_gate(gates.X, target=0)
+
+    # Apply phase gate with theta = 2π/3
+    theta = 2 * np.pi / 3
+    sim.apply_gate(gates.phase(theta), target=0)
+
+    final_state = sim.state.get_vector()
+
+    # |1> should become e^{iθ} |1>
+    expected = np.array([0.0, np.exp(1j * theta)], dtype=complex)
+
+    np.testing.assert_array_almost_equal(final_state, expected)
+
 
 #------------------------------------two-qubit GATE TESTS---------------------------------------
 #------------------------------------UNITARY TEST-----------------------------------------
