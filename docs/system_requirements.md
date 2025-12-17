@@ -19,6 +19,7 @@ mathematical principles of quantum mechanics.
 ---
 
 ## 2. Functional Requirements
+Functional requirements define what a system *must* do, detailing specific features, behaviors, and tasks like user login, data processing, or generating reports, focusing on inputs, outputs, and core functions.
 
 ### 2.1 State Representation
 
@@ -64,8 +65,9 @@ mathematical principles of quantum mechanics.
 
 - The system shall support **projective measurements** for both pure and mixed
   states.
+- The system shall support measuring the density matrix.
 - Measurements shall not be limited to the computational basis.
-- The system shall support **POVM measurements** using arbitrary Kraus operators.
+- The system shall support **POVM measurements** using arbitrary Kraus operators. (POVM = Positive Operator-Valued Measure)
 - A measurement shall return:
   - the classical measurement outcome
   - the corresponding post-measurement quantum state
@@ -86,6 +88,8 @@ mathematical principles of quantum mechanics.
 ---
 
 ## 3. Non-Functional Requirements
+non-functional requirements describe how well the system performs (speed, security).
+
 
 ### 3.1 Modularity and Maintainability
 
@@ -94,6 +98,8 @@ mathematical principles of quantum mechanics.
   measurement, simulator).
 - The code shall follow PEP 8 conventions.
 - Functions and classes shall be documented using docstrings.
+- The system shall contain no bugs.
+- The system shall be able to run up to 2 qubit gates within a timespan of 2 seconds.
 
 ---
 
@@ -112,6 +118,7 @@ mathematical principles of quantum mechanics.
 - The system shall include unit tests for core functionality.
 - Tests shall verify:
   - unitarity of gates
+  - correct gate application
   - correct state evolution
   - correct measurement probabilities
 - Documentation shall include:
