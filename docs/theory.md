@@ -29,9 +29,9 @@ $$
 $$
 
 with the properties:
-- $$ \rho = \rho^\dagger $$ (Hermitian)
-- $$ \rho \succeq 0 $$ (positive semidefinite)
-- $$ \mathrm{Tr}(\rho) = 1 $$
+- $ \rho = \rho^\dagger $ (Hermitian)
+- $ \rho \succeq 0 $ (positive semidefinite)
+- $ \mathrm{Tr}(\rho) = 1 $
 
 This representation naturally supports mixed states, entanglement, and partial
 measurements.
