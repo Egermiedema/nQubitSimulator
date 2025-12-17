@@ -4,22 +4,18 @@ from nqubitsim import gates
 from nqubitsim.simulator import QuantumSimulator
 
 
-def test_single_qubit_unitary():
-    for g in [gates.X, gates.Y, gates.Z, gates.H, gates.S, gates.T]:
-        assert gates.is_unitary(g)
-
-
-def test_two_qubit_unitary():
-    for g in [gates.CNOT, gates.CZ, gates.SWAP]:
-        assert gates.is_unitary(g)
-
-
 def test_expand_dimensions():
     op = gates.expand_single_qubit_gate(gates.X, target=0, num_qubits=3)
     assert op.shape == (8, 8)
     op2 = gates.expand_two_qubit_gate(gates.CNOT, control=0, target=2, num_qubits=3)
     assert op2.shape == (8, 8)
 
+
+#-------------------------------SINGE QUBIT GATE TESTS------------------------------------
+#------------------------------------UNITARY TEST-----------------------------------------
+def test_single_qubit_unitary():
+    for g in [gates.X, gates.Y, gates.Z, gates.H, gates.S, gates.T]:
+        assert gates.is_unitary(g)
 
 
 #------------------------------------X-GATE TESTS---------------------------------------
@@ -68,6 +64,19 @@ def test_x_gate3():
     sim.apply_gate(gates.X, target=0)
     final_state = sim.state.get_vector()
     expected_final = np.array([0.0, 0.0, 1.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+def test_x_gate4():
+    sim = QuantumSimulator(num_qubits=5) # initial  state |00000⟩
+    initial_state = sim.state.get_vector().copy()
+    expected_initial = np.array([1.0, 0.0, 0.0, 0.0])
+
+    sim.apply_gate(gates.X, target=2) # Apply X gate to qubit 2, should flip to |00100⟩
+    sim.apply_gate(gates.X, target=4) # Apply X gate to qubit 4, should flip to |00101⟩
+
+    final_state = sim.state.get_vector()
+    expected_final = np.array([0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
@@ -314,5 +323,108 @@ def test_T_gate2():
     final_state = sim.state.get_vector()
     expected_final = np.array([0.0, np.exp(1j * np.pi / 4)], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+
+#------------------------------------two-qubit GATE TESTS---------------------------------------
+#------------------------------------UNITARY TEST-----------------------------------------
+def test_two_qubit_unitary():
+    for g in [gates.CNOT, gates.CZ, gates.SWAP]:
+        assert gates.is_unitary(g)
+
+#------------------------------------CNOT-GATE TESTS---------------------------------------
+def test_CNOT_gate1():
+    sim = QuantumSimulator(num_qubits=2)
+    
+    # Initial state should be |00⟩
+    initial_state = sim.state.get_vector().copy()
+    expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+    
+    # Apply CNOT with qubit 0 as control and qubit 1 as target (should leave |00⟩ unchanged)
+    sim.apply_controlled_gate(gates.CNOT, control=0, target=1)
+    final_state = sim.state.get_vector()
+    expected_final = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+def test_CNOT_gate2():
+    sim = QuantumSimulator(num_qubits=2)
+    sim.apply_gate(gates.X, target=0) # Start in |10⟩ by applying X
+    initial_state = sim.state.get_vector().copy() # Initial state should be |10⟩
+    expected_initial = np.array([0.0, 0.0, 1.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+    
+    # Apply CNOT with qubit 0 as control and qubit 1 as target. should result in |11⟩
+    sim.apply_controlled_gate(gates.CNOT, control=0, target=1)
+    final_state = sim.state.get_vector()
+    expected_final = np.array([0.0, 0.0, 0.0, 1.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+def test_CNOT_gate3():
+    sim = QuantumSimulator(num_qubits=3)
+    sim.apply_gate(gates.X, target=0) # Start in |100⟩ by applying X
+    initial_state = sim.state.get_vector().copy() # Initial state should be |100⟩
+    expected_initial = np.array([0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+
+    # Apply CNOT with qubit 0 as control and qubit 2 as target. should result in |101⟩
+    sim.apply_controlled_gate(gates.CNOT, control=0, target=2)
+    final_state = sim.state.get_vector()
+    expected_final = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+#------------------------------------CZ-GATE TESTS---------------------------------------
+def test_CZ_gate1():
+    sim = QuantumSimulator(num_qubits=2)
+
+    # Initial state should be |00⟩
+    initial_state = sim.state.get_vector().copy()
+    expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+
+    # Apply CZ with qubit 0 as control and qubit 1 as target (should leave |00⟩ unchanged)
+    sim.apply_controlled_gate(gates.CZ, control=0, target=1)
+    final_state = sim.state.get_vector()
+    expected_final = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+def test_CZ_gate2():
+    sim = QuantumSimulator(num_qubits=2)
+    sim.apply_gate(gates.X, target=1) # Start in |01⟩ by applying X first
+
+    # Initial state should be |01⟩
+    initial_state = sim.state.get_vector().copy()
+    expected_initial = np.array([0.0, 1.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+
+    # Apply CZ gate (Controlled-Z flips |11⟩ to -|11⟩)
+    sim.apply_controlled_gate(gates.CZ, control=0, target=1)
+    final_state = sim.state.get_vector()
+    expected_final = np.array([0.0, 1.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+def test_CZ_gate2():
+    sim = QuantumSimulator(num_qubits=2)
+    sim.apply_gate(gates.X, target=0) # Start in |10⟩ by applying X first
+    sim.apply_gate(gates.X, target=1) # Start in |11⟩ by applying X first
+
+    # Initial state should be |11⟩
+    initial_state = sim.state.get_vector().copy()
+    expected_initial = np.array([0.0, 0.0, 0.0, 1.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+
+    # Apply CZ gate (Controlled-Z flips |11⟩ to -|11⟩)
+    sim.apply_controlled_gate(gates.CZ, control=0, target=1)
+    final_state = sim.state.get_vector()
+    expected_final = np.array([0.0, 0.0, 0.0, -1.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+
 
 
