@@ -440,6 +440,33 @@ def test_CZ_gate2():
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
+#------------------------------------SWAP-GATE TESTS---------------------------------------
+def test_SWAP_gate1():
+    sim = QuantumSimulator(num_qubits=2)
+
+    # Initial state should be |00⟩
+    initial_state = sim.state.get_vector().copy()
+    expected_initial = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+
+    # Apply SWAP gate (should leave |00⟩ unchanged)
+    sim.apply_controlled_gate(gates.SWAP, control=0, target=1)
+    final_state = sim.state.get_vector()
+    expected_final = np.array([1.0, 0.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
+def test_SWAP_gate2():
+    sim = QuantumSimulator(num_qubits=2)
+    sim.apply_gate(gates.X, target=0) # Start in |10⟩ by applying X first
 
+    # Initial state should be |10⟩
+    initial_state = sim.state.get_vector().copy()
+    expected_initial = np.array([0.0, 0.0, 1.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+
+    # Apply SWAP gate (should result in |01⟩)
+    sim.apply_controlled_gate(gates.SWAP, control=0, target=1)
+    final_state = sim.state.get_vector()
+    expected_final = np.array([0.0, 1.0, 0.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
