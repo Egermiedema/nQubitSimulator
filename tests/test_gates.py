@@ -232,7 +232,52 @@ def test_Z_gate3():
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
+#-------------------------------------S-GATE TESTS---------------------------------------
+# test for single qubit on S-gate.
+def test_S_gate1():
+    sim = QuantumSimulator(num_qubits=1)
+    
+    # Initial state should be |0⟩
+    initial_state = sim.state.vector.copy()
+    expected_initial = np.array([1.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+    
+    # Apply S gate (Phase gate leaves |0⟩ unchanged)
+    sim.apply_gate(gates.S)
+    final_state = sim.state.vector
+    expected_final = np.array([1.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
+def test_S_gate2():
+    sim = QuantumSimulator(num_qubits=1)
+    sim.apply_gate(gates.X) # Start in |1⟩ by applying X first
+
+    # Initial state should be |1⟩
+    initial_state = sim.state.vector.copy()
+    expected_initial = np.array([0.0, 1.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+    
+    # Apply S gate (Phase gate transforms |1⟩ to i|1⟩)
+    sim.apply_gate(gates.S)
+    final_state = sim.state.vector
+    expected_final = np.array([0.0, 0.0 + 1.0j], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+def test_S_gate3():
+    sim = QuantumSimulator(num_qubits=2)
+    sim.apply_gate(gates.X, target=0) # Start in |10⟩ by applying X first
+    sim.apply_gate(gates.X, target=1) # Now in |11⟩
+    
+    # Initial state should be |11⟩
+    initial_state = sim.state.vector.copy()
+    expected_initial = np.array([0.0, 0.0, 0.0, 1.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+    
+    # Apply S gate to qubit 1 (leaves |11⟩ unchanged)
+    sim.apply_gate(gates.S)
+    final_state = sim.state.vector
+    expected_final = np.array([0.0, 0.0, 0.0, 0.0 + 1.0j], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
 
 

@@ -35,9 +35,10 @@ class QuantumSimulator:
             apply_depolarizing(self.state, self.noise_cfg["depolarizing"])
 
     # Apply a single-qubit gate to target qubit
-    def apply_gate(self, gate: np.ndarray, target: int):
+    def apply_gate(self, gate: np.ndarray, target=0):
         """Apply a single-qubit gate to target qubit."""
         op = gates.expand_single_qubit_gate(gate, target, self.num_qubits)
+        """Apply a single-qubit gate to target qubit (defaults to qubit 0)."""
         self.state.apply_unitary(op)
         self._apply_noise()
         return self
