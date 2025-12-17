@@ -1,167 +1,95 @@
 # Quantum Measurement Theory
 
 This document describes the theoretical background of the measurement
-implementations used in `measurement.py`. Measurements are formulated using
-the density matrix formalism, allowing both pure and mixed quantum states to be
-treated in a unified and physically correct manner.
+implementations used in `measurement.py`. Measurements are implemented using
+the density matrix formalism, which supports both pure and mixed quantum states.
 
 ---
 
 ## 1. Quantum Measurement
 
-In quantum mechanics, measurement is a probabilistic process that converts a
-quantum state into classical information while simultaneously altering the
-state itself. Unlike classical systems, quantum measurements are generally
-**state-disturbing**.
+In quantum mechanics, measurement is a probabilistic process that extracts
+classical information from a quantum state while simultaneously altering that
+state.
 
-Given a quantum state represented by a density matrix \( \rho \), the outcome
-of a measurement is not deterministic but governed by the Born rule.
+All measurements in this project follow the same structure:
+1. Compute outcome probabilities
+2. Sample an outcome according to these probabilities
+3. Update (collapse) the quantum state
 
-All measurements implemented in this project follow three fundamental steps:
-
-1. Compute the probability of each measurement outcome.
-2. Randomly sample an outcome according to these probabilities.
-3. Update (collapse) the quantum state conditioned on the observed outcome.
+The probabilities are governed by the Born rule.
 
 ---
 
 ## 2. Density Matrix Formalism
 
-A quantum state of an \( n \)-qubit system is represented by a density matrix
+An n-qubit quantum state is represented by a density matrix rho:
 
-\[
-\rho \in \mathbb{C}^{2^n \times 2^n},
-\]
+rho ∈ C^(2^n × 2^n)
 
-which satisfies:
-- \( \rho = \rho^\dagger \) (Hermitian)
-- \( \rho \succeq 0 \) (positive semidefinite)
-- \( \mathrm{Tr}(\rho) = 1 \)
+The density matrix satisfies:
+- rho = rho† (Hermitian)
+- rho ≥ 0  (positive semidefinite)
+- Tr(rho) = 1
 
-This representation allows mixed states, entanglement, and partial measurements
-to be modeled naturally.
+This formalism naturally supports mixed states, entanglement, and partial
+measurements.
 
 ---
 
 ## 3. Projective Measurements
 
-### 3.1 Definition
+A projective measurement is defined by a set of orthogonal projectors {P_i}:
 
-A projective measurement is defined by a set of orthogonal projectors
+P_i = |φ_i⟩⟨φ_i|
 
-\[
-\{ P_i \}, \quad P_i = | \phi_i \rangle \langle \phi_i |,
-\]
+with:
+Σ_i P_i = I
 
-satisfying
+The probability of outcome i is:
 
-\[
-\sum_i P_i = I.
-\]
+p_i = Tr(P_i · rho)
 
-The probability of obtaining outcome \( i \) is
+After observing outcome i, the post-measurement state is:
 
-\[
-p_i = \mathrm{Tr}(P_i \rho).
-\]
-
-After measurement, the quantum state collapses to
-
-\[
-\rho' = \frac{P_i \rho P_i}{p_i}.
-\]
-
----
-
-### 3.2 Computational Basis Measurement
-
-If no custom basis is specified, measurements are performed in the
-**computational basis**. For \( k \) measured qubits, this basis consists of
-\( 2^k \) orthonormal basis vectors corresponding to all binary bitstrings.
-
-Each basis vector defines a projector, which is then used to evaluate outcome
-probabilities.
+rho' = (P_i · rho · P_i) / p_i
 
 ---
 
 ## 4. Measurements on Subsystems
 
-Measurements can be applied to a **subset of qubits** within a larger quantum
-system. In this case, the measurement operator must be embedded into the full
-Hilbert space:
+Measurements can be applied to a subset of qubits within a larger system.
+In this case, the measurement operator is embedded into the full Hilbert space:
 
-\[
-P_i^{(\text{full})} = P_i \otimes I_{\text{rest}},
-\]
+P_i(full) = P_i ⊗ I_rest
 
-where \( I_{\text{rest}} \) acts on all unmeasured qubits.
-
-This embedding ensures that:
-- Measurement outcomes depend on entanglement with other qubits.
-- Measuring one qubit can collapse the state of the entire system.
+This ensures that:
+- Measurement outcomes depend on entanglement
+- Measuring part of the system can collapse the full state
 
 ---
 
 ## 5. POVM Measurements
 
-### 5.1 Generalized Measurements
+Generalized measurements are implemented using POVMs, defined by Kraus
+operators {K_i} satisfying:
 
-Projective measurements are a special case of **Positive Operator-Valued
-Measures (POVMs)**. A POVM is defined by a set of Kraus operators
+Σ_i (K_i† · K_i) = I
 
-\[
-\{ K_i \},
-\]
+The probability of outcome i is:
 
-satisfying the completeness relation
+p_i = Tr(K_i · rho · K_i†)
 
-\[
-\sum_i K_i^\dagger K_i = I.
-\]
+The post-measurement state is:
 
-The probability of outcome \( i \) is
+rho' = (K_i · rho · K_i†) / p_i
 
-\[
-p_i = \mathrm{Tr}(K_i \rho K_i^\dagger),
-\]
-
-and the post-measurement state is
-
-\[
-\rho' = \frac{K_i \rho K_i^\dagger}{p_i}.
-\]
+POVMs allow modeling noisy, imperfect, or weak measurements.
 
 ---
 
-### 5.2 Use Cases
+## 6. State Update
 
-POVMs allow modeling of:
-- Noisy or imperfect measurements
-- Weak or partial measurements
-- Effective measurements arising from system–environment interactions
-
-In the implementation, Kraus operators may act on the full system or on a
-specific subset of qubits.
-
----
-
-## 6. State Update and Collapse
-
-After a measurement outcome is sampled, the quantum state is updated
-**in-place** to reflect the measurement-induced collapse. A new quantum state
-object representing the post-measurement state is also returned.
-
-This approach allows:
-- Sequential measurements
-- Simulation of adaptive measurement strategies
-- Clear separation between pre- and post-measurement states
-
----
-
-## 7. Summary
-
-- Measurements are implemented using the density matrix formalism.
-- Projective measurements use orthogonal projectors derived from a basis.
-- POVMs use Kraus operators for generalized measurement modeling.
-- Measurements can act on subsets of qubits via operator embedding.
-- All measurements follow the Born rule and correctly update the quantum state.
+After a measurement outcome is sampled, the quantum state is updated in-place
+to reflect the collapse. The post-measurement state is also returned as a new
+QuantumState object, allowing further processing.
