@@ -49,7 +49,7 @@ SWAP = np.array(
     dtype=complex,
 )
 
-
+#TODO get rid of target for single qubit gate.
 def expand_single_qubit_gate(gate: np.ndarray, target: int, num_qubits: int):
     """Kronecker-expand a 2x2 gate.
      function takes a single-qubit quantum gate (represented as a 2×2 NumPy array) 
