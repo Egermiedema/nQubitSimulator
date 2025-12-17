@@ -44,7 +44,7 @@ State evolution is given by:
 - Pure state:
 $|\psi'\rangle = U |\psi\rangle$
 - Mixed state:
-&rho' = U \rho U^\dagger$
+&\rho' = U \rho U^\dagger$
 
 Single-qubit and two-qubit gates are expanded to the full system size using
 Kronecker products, e.g.:
