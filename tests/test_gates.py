@@ -71,8 +71,6 @@ def test_x_gate3():
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
-
-
 #------------------------------------H-GATE TESTS---------------------------------------
 # test for single qubit on H-gate.
 def test_H_gate1():
