@@ -1,9 +1,7 @@
-"""State representation (pure vector or density matrix) with optional sparsity."""
+"""State representation (pure vector or density matrix)."""
 
 from __future__ import annotations
-
-from dataclasses import dataclass
-from typing import Iterable, List, Optional, Sequence
+from typing import Iterable, List, Optional
 
 import numpy as np
 
@@ -26,10 +24,6 @@ class QuantumState:
             zero = np.zeros(self.dim, dtype=complex)
             zero[0] = 1.0
             self.set_pure(zero)  # Default to |0...0>
-
-    @property #TODO: verwijderen
-    def is_density(self) -> bool:
-        return self._density_matrix is not None # True if state is in density matrix form.
     
     #Make a copy of the "QuantumState" saving stuff such as num_qubits and representation (pure vs mixed)
     def copy(self) -> "QuantumState":
@@ -40,15 +34,15 @@ class QuantumState:
         )
 
     #Return the vector (only pure)
-    @property #TODO verwijderen
+    @property
     def vector(self) -> np.ndarray:
         if self._state_vector is None:
             raise ValueError("State is not in pure form.")
         return self._state_vector
 
     #return the density matrix (only mixed)
-    @property #TODO: verwijderen
-    def density(self):
+    @property 
+    def density(self) -> np.ndarray:
         if self._density_matrix is None:
             raise ValueError("State is not in density form.")
         return self._density_matrix
