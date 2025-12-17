@@ -71,6 +71,8 @@ def test_x_gate3():
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
+
+
 #------------------------------------H-GATE TESTS---------------------------------------
 # test for single qubit on H-gate.
 def test_H_gate1():
@@ -278,6 +280,39 @@ def test_S_gate3():
     sim.apply_gate(gates.S)
     final_state = sim.state.vector
     expected_final = np.array([0.0, 0.0, 0.0, 0.0 + 1.0j], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+#-------------------------------------T-GATE TESTS---------------------------------------
+# test for single qubit on T-gate.
+def test_T_gate1():
+    sim = QuantumSimulator(num_qubits=1)
+    
+    # Initial state should be |0⟩
+    initial_state = sim.state.vector.copy()
+    expected_initial = np.array([1.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+    
+    # Apply T gate (π/8 gate leaves |0⟩ unchanged)
+    sim.apply_gate(gates.T)
+    final_state = sim.state.vector
+    expected_final = np.array([1.0, 0.0], dtype=complex)
+    np.testing.assert_array_almost_equal(final_state, expected_final)
+
+
+def test_T_gate2():
+    sim = QuantumSimulator(num_qubits=1)
+    sim.apply_gate(gates.X) # Start in |1⟩ by applying X first
+
+    # Initial state should be |1⟩
+    initial_state = sim.state.vector.copy()
+    expected_initial = np.array([0.0, 1.0], dtype=complex)
+    np.testing.assert_array_almost_equal(initial_state, expected_initial)
+    
+    # Apply T gate (π/8 gate transforms |1⟩ to exp(iπ/4)|1⟩)
+    sim.apply_gate(gates.T)
+    final_state = sim.state.vector
+    expected_final = np.array([0.0, np.exp(1j * np.pi / 4)], dtype=complex)
     np.testing.assert_array_almost_equal(final_state, expected_final)
 
 
