@@ -42,7 +42,6 @@ $$
 
 State evolution is given by:
 - Pure state:
-
 $|\psi'\rangle = U |\psi\rangle$
 - Mixed state:
 $\rho' = U \rho U^\dagger$
