@@ -30,8 +30,8 @@ Sequence Diagrams are interaction diagrams that detail how operations are carrie
 
 ### Flowcharts
 
-Flowcharts are used to illustrate the internal control flow of complex functions within the quantum simulator. They provide a clear, step-by-step visualization of the logical decisions, data transformations, and state updates that occur during execution. Unlike sequence diagrams, flowcharts focus on algorithmic structure rather than object interaction, making them especially suitable for describing processes such as quantum measurement, noise application, and state evolution.
+Flowcharts are used to visualize the internal logic of key functions in the quantum simulator. They show the sequence of operations, decision points, and state updates within individual algorithms, such as quantum measurement and gate application.
 
-In this project, flowcharts are used to document the most critical and non-trivial functions, including projective measurements, POVM measurements, gate application with noise, and unitary state updates. These diagrams help clarify how probabilistic outcomes are generated and how the quantum state is consistently updated throughout the simulation.
+In this project, flowcharts are included for the more complex functions to clarify how probabilities are computed and how the quantum state is updated during the simulation.
 
 <p align="center"> <img src="pictures/Flowcharts_Individuele_functiesV1.drawio.pdf" alt="Flowcharts" width="80%"> </p>
