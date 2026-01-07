@@ -34,4 +34,4 @@ Flowcharts are used to illustrate the internal control flow of complex functions
 
 In this project, flowcharts are used to document the most critical and non-trivial functions, including projective measurements, POVM measurements, gate application with noise, and unitary state updates. These diagrams help clarify how probabilistic outcomes are generated and how the quantum state is consistently updated throughout the simulation.
 
-<p align="center"> <img src="docs/pictures/Flowcharts_Individuele_functiesV1.drawio.pdf" alt="Flowcharts" width="80%"> </p>
+<p align="center"> <img src="pictures/Flowcharts_Individuele_functiesV1.drawio.pdf" alt="Flowcharts" width="80%"> </p>
