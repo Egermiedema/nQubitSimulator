@@ -22,7 +22,7 @@
 - Measurements: probability distributions sum to 1 and collapse matches projector logic.
 
 ### Sequence diagram
-Sequence Diagrams are interaction diagrams that detail how operations are carried out. They capture the interaction between objects in the context of a collaboration. Sequence Diagrams are time focus and they show the order of the interaction visually by using the vertical axis of the diagram to represent time what messages are sent and when. In our sequence diagram the user performs the actions in the example python script "simulation.py".
+Sequence Diagrams are interaction diagrams that detail how operations are carried out. They capture the interaction between objects in the context of a collaboration. Sequence Diagrams are time focus and they show the order of the interaction visually by using the vertical axis of the diagram to represent time what messages are sent and when. In our sequence diagram the user performs the actions in the example python script "simulation.py". The lines show communication between objects, with solid lines for requests and dashed lines for returns.
 
 <p align="center">
   <img src="pictures/sequence_diagram.png" alt="Project Banner" width="80%">
