@@ -71,4 +71,3 @@ class QuantumSimulator:
         self.state = QuantumState(num_qubits=self.num_qubits)
         self.classical_register = []
         return self
-

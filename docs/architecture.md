@@ -21,10 +21,17 @@
 - State evolution: compare against analytic results on small systems.
 - Measurements: probability distributions sum to 1 and collapse matches projector logic.
 
-### sequence diagram
+### Sequence diagram
 Sequence Diagrams are interaction diagrams that detail how operations are carried out. They capture the interaction between objects in the context of a collaboration. Sequence Diagrams are time focus and they show the order of the interaction visually by using the vertical axis of the diagram to represent time what messages are sent and when. In our sequence diagram the user performs the actions in the example python script "simulation.py".
 
 <p align="center">
   <img src="pictures/sequence_diagram.png" alt="Project Banner" width="80%">
 </p>
 
+### Flowcharts
+
+Flowcharts are used to illustrate the internal control flow of complex functions within the quantum simulator. They provide a clear, step-by-step visualization of the logical decisions, data transformations, and state updates that occur during execution. Unlike sequence diagrams, flowcharts focus on algorithmic structure rather than object interaction, making them especially suitable for describing processes such as quantum measurement, noise application, and state evolution.
+
+In this project, flowcharts are used to document the most critical and non-trivial functions, including projective measurements, POVM measurements, gate application with noise, and unitary state updates. These diagrams help clarify how probabilistic outcomes are generated and how the quantum state is consistently updated throughout the simulation.
+
+<p align="center"> <img src="docs/pictures/Flowcharts_Individuele_functiesV1.drawio.pdf" alt="Flowcharts" width="80%"> </p>
