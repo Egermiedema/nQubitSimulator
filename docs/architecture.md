@@ -21,9 +21,10 @@
 - State evolution: compare against analytic results on small systems.
 - Measurements: probability distributions sum to 1 and collapse matches projector logic.
 
-## sequence diagram
+### sequence diagram
+Sequence Diagrams are interaction diagrams that detail how operations are carried out. They capture the interaction between objects in the context of a collaboration. Sequence Diagrams are time focus and they show the order of the interaction visually by using the vertical axis of the diagram to represent time what messages are sent and when. In our sequence diagram the user performs the actions in the example python script "simulation.py".
 
 <p align="center">
-  <img src="pictures/sequence_diagram.png" alt="Project Banner" width="50%">
+  <img src="pictures/sequence_diagram.png" alt="Project Banner" width="80%">
 </p>
 
