@@ -1,16 +1,15 @@
-# n-Qubit Quantum Simulator ✅
+# n-Qubit Quantum Simulator 
 
 A compact Python package for simulating pure and mixed n-qubit states with gates, projective and POVM measurements, and simple noise channels (bit-flip, depolarizing). This repository was developed for the "Quantum Information & Algorithms" coursework and is suitable as a lightweight educational simulator.
 
 ---
 
-## Quick start ⚡
+## Quick start 
 
 Requirements
 - Python 3.10+
 - Required runtime packages: `numpy`, `scipy`
 - Optional for development/testing: `pytest`
-- Optional for the GUI demo: `matplotlib` (Tkinter is typically included with standard Python installs)
 
 Install
 ```bash
@@ -35,7 +34,7 @@ python -m pytest
 
 ---
 
-## Project layout 🔧
+## Project layout 
 
 - `src/nqubitsim/` — main package
   - `gates.py` — common single- and two-qubit gates and utilities to expand them to an n-qubit operator
@@ -44,12 +43,12 @@ python -m pytest
   - `measurement.py` — `projective_measure` and `povm_measure` helpers
   - `simulator.py` — `QuantumSimulator` class tying everything together
 - `tests/` — unit tests for gates, simulator behavior, measurements
-- `run_simulator.py` / `run_simulatorVisualBellState.py` — example scripts (command-line and GUI demo)
+- `run_simulator.py` — example script
 - `docs/` — design notes and architecture diagrams
 
 ---
 
-## Quick usage example 📌
+## Quick usage example 
 
 ```python
 from nqubitsim.simulator import QuantumSimulator
@@ -71,12 +70,11 @@ print("Post-measurement density matrix:\n", post_state.get_density())
 ```
 
 Notes
-- The example scripts add `src/` to `sys.path` so you can run them directly from the repository root.
 - For reproducible randomness pass an RNG instance: `rng = numpy.random.default_rng(seed)` to `QuantumSimulator(..., rng=rng)`.
 
 ---
 
-## API summary 🧭
+## API summary 
 
 - `QuantumSimulator(num_qubits: int, noise: dict|None = None, rng=None)`
   - Fields: `state` (QuantumState), `classical_register` (list of measurement outcomes)
@@ -98,20 +96,8 @@ Notes
 
 ---
 
-## Examples / Demos 🎛️
+## Examples / Demos 
 
 - `run_simulator.py` — command-line demo that prepares a Bell pair, measures it, and shows sampling counts
-- `run_simulatorVisualBellState.py` — simple Tkinter + matplotlib GUI showing the density matrix and measurement output (requires `matplotlib`)
-
----
-
-## Contributing & development 🤝
-
-- Tests live in `tests/`. Please add tests for any new behavior or bugfixes.
-- Follow the existing lightweight style (simple, readable, well-tested functions).
-
----
-
-If anything in this README is unclear or you'd like a more elaborate example (e.g., multi-qubit circuits or custom POVMs), open an issue or request an example and I’ll add one. ✨
 
 
