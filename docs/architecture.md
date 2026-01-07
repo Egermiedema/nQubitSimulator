@@ -26,3 +26,4 @@
 <p align="center">
   <img src="docs/pictures/sequence_diagram.png" alt="Project Banner" width="50%">
 </p>
+
