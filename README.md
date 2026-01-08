@@ -1,6 +1,6 @@
 # n-Qubit Quantum Simulator 
 
-A compact Python package for simulating pure and mixed n-qubit states with gates, projective and POVM measurements, and simple noise channels (bit-flip, depolarizing). This repository was developed for the "Quantum Information & Algorithms" coursework and is suitable as a lightweight educational simulator.
+A Python package for simulating pure and mixed n-qubit states with gates, projective and POVM measurements, and simple noise channels (bit-flip, depolarizing). This repository is developed for the Quantum Information & Algorithms course. The provided `run_simulator.py` and `simulator_notebook.ipyn` show how this package can be used for qubit simulations.
 
 ---
 
@@ -45,7 +45,7 @@ python -m pytest
 - `tests/` — unit tests for gates, simulator behavior, measurements
 - `run_simulator.py` — example script
 - `docs/` — design notes and architecture diagrams
-
+- `simulator_notebook.ipyn` — Jupyter notebook example of the nQubitSimulator
 ---
 
 ## Quick usage example 
@@ -99,5 +99,6 @@ Notes
 ## Examples / Demos 
 
 - `run_simulator.py` — command-line demo that prepares a Bell pair, measures it, and shows sampling counts
+- `simulator_notebook.ipyn` — Jupyter notebook with 2 examples of how to use the simulator.
 
 
