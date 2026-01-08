@@ -45,18 +45,6 @@ def main():
     print("Classical register:", sim.classical_register)
     print("Post-measurement density matrix:\n", post.get_density())
 
-    # Reset and run multiple shots to illustrate sampling
-    sim.reset()
-    prepare_bell_pair(sim)
-    shots = 10
-    counts = {0: 0, 1: 0, 2: 0, 3: 0}
-    for _ in range(shots):
-        outcome, _ = sim.measure([0, 1])
-        counts[outcome] += 1
-        sim.reset()
-        prepare_bell_pair(sim)
-    print(f"Sampling over {shots} shots (0=|00>, 3=|11>):", counts)
-
 
 if __name__ == "__main__":
     main()
