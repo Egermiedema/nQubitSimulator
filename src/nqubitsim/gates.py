@@ -1,7 +1,5 @@
 """Common quantum gates and expansion utilities."""
 
-from __future__ import annotations
-
 import numpy as np
 
 # Base single-qubit gates (2x2)
